@@ -16,7 +16,7 @@ let SHOTS = 0;
 
 function setup() {
   createCanvas(300, 400);
-  frameRate(120);
+  // frameRate(120);
 
   player = new Player();
   bullets = new Bullets();
