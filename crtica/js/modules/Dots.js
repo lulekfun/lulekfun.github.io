@@ -57,7 +57,7 @@ class Dot {
   }
 
   eat() {
-    if (!this.sEaten) {
+    if (!this.isEaten) {
       score.add(this.power);
       this.isEaten = true;
     }

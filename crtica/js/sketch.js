@@ -10,6 +10,8 @@ let score;
 
 function setup() {
   createCanvas(600, 300); // 600, 300
+  frameRate(60);
+  noCursor();
 
   trail = new Trail();
   dots = new Dots();
@@ -52,3 +54,6 @@ function keyPressed() {
 //  int time = 3000; // ms
 
 //}
+
+// TODO: naredi, da bo SPEED spremenil hitrost vsega (tudi Trail)
+// FIXME: popravi
