@@ -51,7 +51,7 @@ function keyPressed() {
 function renderWelcome() {
   fill(0);
   noStroke();
-  textFont('Menlo');
+  textFont('Menlo, Consolas, monospace');
   textSize(14);
   textStyle(BOLD);
   textAlign(CENTER, CENTER);

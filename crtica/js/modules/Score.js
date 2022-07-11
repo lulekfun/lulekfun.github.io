@@ -10,7 +10,7 @@ class Score {
   render() {
     fill(0);
     noStroke();
-    textFont('Menlo');
+    textFont('Menlo, Consolas, monospace');
     textSize(15);
     textStyle(BOLD);
     textAlign(RIGHT, TOP);
