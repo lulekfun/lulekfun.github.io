@@ -3,6 +3,9 @@ let DIR = { x: 0, y: -1 };
 let snake;
 let apple;
 
+const MARGIN_X = 10; // px
+const MARGIN_Y = 10;
+
 function setup() {
   createCanvas(300, 300);
   frameRate(60); // 60

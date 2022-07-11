@@ -5,7 +5,9 @@ class Apple {
   }
 
   new() {
-    this.coords.set(random(width), random(height));
+    let randX = random(MARGIN_X, width - MARGIN_X);
+    let randY = random(MARGIN_Y, width - MARGIN_Y);
+    this.coords.set(randX, randY);
   }
 
   render() {
