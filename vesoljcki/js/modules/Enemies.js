@@ -14,7 +14,7 @@ class Enemy {
 
     this.powerDefault = e.power; // random(3, 8);
     this.power = this.powerDefault;
-    this.speed = 0.1;
+    this.speed = 0.3 + LEVEL * 0.1;
 
     let locX = random(PADDING_X, width - PADDING_X);
     this.loc = createVector(locX, PADDING_Y);
@@ -47,13 +47,15 @@ class Enemy {
   }
 
   update() {
-    this.loc.y += SPEED * this.speed;
+    this.loc.y += this.speed;
 
     // check for being hit
     bullets.arr.forEach((b) => {
       if (this.isHit(b.loc.x, b.loc.y)) {
         --b.damage; // bullet loses some damage
         --this.power; // enemy loses some damage
+
+        progress.add(4);
       }
     });
   }

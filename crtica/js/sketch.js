@@ -1,5 +1,6 @@
-let DIR;
 const SPEED = 3; // 3
+
+let IS_PLAYING = false;
 
 const MARGIN_X = -30;
 const MARGIN_Y = 20;
@@ -16,16 +17,13 @@ function setup() {
   trail = new Trail();
   dots = new Dots();
   score = new Score();
+
+  for (let i = 0; i < 90; i++) {
+    trail.update(); // render a portion of the trail
+  }
 }
 
 function draw() {
-  if (keyIsDown(32)) {
-    // SPACE
-    DIR = -1;
-  } else {
-    DIR = 1;
-  }
-
   // --- COMPUTE
   trail.update();
   dots.update();
@@ -39,21 +37,23 @@ function draw() {
   // --- DRAW
   background(255);
 
-  score.render();
+  if (IS_PLAYING) score.render();
+  else renderWelcome();
+
   trail.render();
   dots.render();
 }
 
 function keyPressed() {
-  if (key == 's') {
-    //
-  }
+  if (keyIsDown(32)) IS_PLAYING = true;
 }
 
-//void speedup() {
-//  int time = 3000; // ms
-
-//}
-
-// TODO: naredi, da bo SPEED spremenil hitrost vsega (tudi Trail)
-// FIXME: popravi
+function renderWelcome() {
+  fill(0);
+  noStroke();
+  textFont('Menlo');
+  textSize(14);
+  textStyle(BOLD);
+  textAlign(CENTER, CENTER);
+  text('PRITISNI SPACE', (width + trail.head.x) / 2, height / 2);
+}

@@ -4,6 +4,8 @@ class Player {
     this.h = 12;
     this.w = 14;
 
+    this.speed = 2;
+
     this.minX = this.w / 2;
     this.maxX = width - this.w / 2;
     this.locX = width / 2;
@@ -15,7 +17,7 @@ class Player {
       noLoop();
     }
 
-    let diff = DIR * SPEED;
+    let diff = DIR * this.speed;
     this.locX = min(max(this.locX + diff, this.minX), this.maxX);
   }
 

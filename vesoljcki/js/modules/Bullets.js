@@ -1,12 +1,12 @@
 class Bullet {
   constructor(xloc, yloc) {
     this.loc = createVector(xloc, yloc);
-    this.speed = 2;
-    this.damage = 1; // 3
+    this.speed = 6;
+    this.damage = 1;
   }
 
   update() {
-    this.loc.y -= this.speed * SPEED;
+    this.loc.y -= this.speed;
   }
 
   destroy() {
@@ -32,6 +32,14 @@ class Bullets {
 
   update() {
     this.arr.forEach((b) => b.update());
+
+    if (SHOTS) {
+      let locX = player.locX;
+      let locY = height - player.h;
+      this.new(locX, locY);
+
+      --SHOTS;
+    }
 
     // remove obsolete
     this.arr = this.arr.filter((b) => b.loc.y > PADDING_Y && b.damage > 0);

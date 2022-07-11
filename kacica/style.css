@@ -1,0 +1,18 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgb(40, 40, 40);
+}
+
+canvas {
+  display: block;
+  /* border: 3px solid black; */
+}

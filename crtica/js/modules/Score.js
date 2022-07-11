@@ -8,11 +8,12 @@ class Score {
   }
 
   render() {
-    fill(240);
+    fill(0);
     noStroke();
     textFont('Menlo');
-    textSize(16);
-    textAlign(CENTER, CENTER);
-    text('' + this.SCORE, width / 2, height / 2);
+    textSize(15);
+    textStyle(BOLD);
+    textAlign(RIGHT, TOP);
+    text(`${this.SCORE}`, width - 10, 10);
   }
 }

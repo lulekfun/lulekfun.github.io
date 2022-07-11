@@ -1,12 +1,22 @@
 class Trail {
   constructor() {
-    this.diff = 0;
+    this.dir = 1;
+    this.gravity = 0.2;
+    this.speed = 0;
 
-    this.head = createVector(200, 0); //  200, 0
+    this.head = createVector(200, 90); //  200, 0
     this.coords = [];
   }
 
   update() {
+    if (IS_PLAYING) {
+      this.dir = keyIsDown(32) || mouseIsPressed ? -1 : 1; // SPACE
+    } else {
+      if (abs(trail.speed) > 5) {
+        trail.dir *= -1;
+      }
+    }
+
     this.computeY();
     this.computeVertices();
     this.moveLeft();
@@ -17,8 +27,8 @@ class Trail {
   }
 
   computeY() {
-    this.diff += 0.2 * DIR;
-    this.head.y += this.diff;
+    this.speed += this.gravity * this.dir;
+    this.head.y += this.speed;
   }
 
   computeVertices() {

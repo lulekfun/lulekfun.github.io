@@ -1,29 +1,35 @@
 let player;
 let bullets;
 let enemies;
+let progress;
+let powerups;
 
-const SPEED = 3;
+// let SPEED = 3; // TODO: const?
+let LEVEL = 0;
 let DIR = 0; // left-right
 
 const PADDING_X = 10;
 const PADDING_Y = -10; // -10px
 
+let SHOT_NO = 1;
 let SHOTS = 0;
 
-// function preload() {
-//   img = loadImage('assets/bricks.jpg');
-// }
+let BG_COLOR;
 
 function setup() {
   createCanvas(300, 400);
-  // frameRate(120);
+  frameRate(60);
 
   player = new Player();
   bullets = new Bullets();
   enemies = new Enemies();
+  progress = new Progress();
+  powerups = new Powerups();
+
+  BG_COLOR = color(0);
 
   noSmooth();
-  // noCursor();
+  noCursor();
 }
 
 function draw() {
@@ -33,26 +39,24 @@ function draw() {
   player.update();
   bullets.update();
   enemies.update();
-
-  if (SHOTS) {
-    let locX = player.locX;
-    let locY = height - player.h;
-    bullets.new(locX, locY);
-
-    --SHOTS;
-  }
+  progress.update();
 
   // -- GRAPHICS
-  background(0);
+  background(BG_COLOR);
 
   player.render();
   bullets.render();
   enemies.render();
+
+  progress.render();
 }
 
 function keyPressed() {
   if (key == ' ') {
-    SHOTS = 1;
+    // fire shots
+    SHOTS = SHOT_NO;
+
+    progress.add(-2);
   }
 
   if (key == 'e') {
@@ -65,7 +69,7 @@ function checkKeys() {
 }
 
 function gameOver() {
-  // red glow
+  // --- red glow
   // fill(255, 0, 0, 50);
   // blendMode(SCREEN);
   // rect(0, 0, width, height);
