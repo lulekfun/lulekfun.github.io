@@ -99,7 +99,7 @@ class Dots {
 
   checkForEating() {
     for (let d of this.dots) {
-      if (trail.head.dist(d.coords) < d.radius - 4) {
+      if (trail.head.dist(d.coords) < d.radius) {
         d.eat();
       }
     }

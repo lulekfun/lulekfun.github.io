@@ -31,7 +31,7 @@ function draw() {
   if (score.SCORE < 0) {
     // GAME OVER
     noLoop();
-    return;
+    // return;
   }
 
   // --- DRAW
