@@ -15,4 +15,6 @@ body {
 canvas {
   display: block;
   border: 3px solid black;
+  user-select: none;
+  pointer-events: none;
 }

@@ -24,6 +24,7 @@ function setup() {
 }
 
 function draw() {
+  if (mainPressed()) IS_PLAYING = true;
   // --- COMPUTE
   trail.update();
   dots.update();
@@ -44,8 +45,8 @@ function draw() {
   dots.render();
 }
 
-function keyPressed() {
-  if (keyIsDown(32)) IS_PLAYING = true;
+function mainPressed() {
+  return keyIsDown(32) || mouseIsPressed; // SPACE/CLICK
 }
 
 function renderWelcome() {

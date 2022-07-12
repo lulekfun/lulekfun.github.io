@@ -10,7 +10,7 @@ class Trail {
 
   update() {
     if (IS_PLAYING) {
-      this.dir = keyIsDown(32) || mouseIsPressed ? -1 : 1; // SPACE
+      this.dir = mainPressed() ? -1 : 1; // SPACE
     } else {
       if (abs(trail.speed) > 5) {
         trail.dir *= -1;
