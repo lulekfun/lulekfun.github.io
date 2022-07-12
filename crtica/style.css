@@ -1,4 +1,15 @@
-html, body {
+* {
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  /* -webkit-touch-callout: none; */
+  /* pointer-events: none; */
+}
+
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -15,6 +26,4 @@ body {
 canvas {
   display: block;
   border: 3px solid black;
-  user-select: none;
-  pointer-events: none;
 }

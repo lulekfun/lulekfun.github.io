@@ -24,8 +24,8 @@ canvas {
 }
 
 progress {
-  -webkit-appearance: none;
   appearance: none;
+  -webkit-appearance: none;
 
   margin-top: 2rem;
   width: 250px;

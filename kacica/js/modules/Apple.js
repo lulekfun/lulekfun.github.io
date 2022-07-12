@@ -1,13 +1,32 @@
 class Apple {
   constructor() {
-    this.coords = createVector(random(width), random(height));
     this.width = 3;
+    this.coords = null;
+
+    this.new();
   }
 
   new() {
-    let randX = random(MARGIN_X, width - MARGIN_X);
-    let randY = random(MARGIN_Y, width - MARGIN_Y);
-    this.coords.set(randX, randY);
+    let ok = false;
+    let v;
+
+    while (!ok) {
+      let randX = random(MARGIN_X, width - MARGIN_X);
+      let randY = random(MARGIN_Y, height - MARGIN_Y);
+
+      v = createVector(randX, randY);
+
+      for (let c of snake.coords) {
+        if (c.dist(v) < 10) {
+          ok = false;
+          break;
+        } else {
+          ok = true;
+        }
+      }
+    }
+
+    this.coords = v;
   }
 
   render() {
