@@ -1,19 +1,28 @@
 class Trail {
   constructor() {
+    this.init();
+  }
+
+  init() {
     this.dir = 1;
     this.gravity = 0.2;
     this.speed = 0;
 
     this.head = createVector(200, 90); //  200, 0
     this.coords = [];
+
+    // render a portion of the trail
+    for (let i = 0; i < 90; i++) {
+      this.update();
+    }
   }
 
   update() {
-    if (IS_PLAYING) {
+    if (gameState.is('PLAYING')) {
       this.dir = mainPressed() ? -1 : 1; // SPACE
     } else {
-      if (abs(trail.speed) > 5) {
-        trail.dir *= -1;
+      if (abs(this.speed) > 5) {
+        this.dir *= -1;
       }
     }
 
@@ -22,7 +31,11 @@ class Trail {
     this.moveLeft();
 
     if (this.isOffScreen()) {
-      --score.SCORE;
+      gameState.set('GAME_OVER');
+    }
+
+    if (lives.isDead) {
+      gameState.set('GAME_OVER');
     }
   }
 

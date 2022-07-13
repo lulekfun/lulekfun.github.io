@@ -2,9 +2,8 @@ class Dot {
   constructor() {
     this.defaultRadius = 8;
 
-    this.power = this.randomPower();
-    this.radius;
-    this.fillColor;
+    this.radius = null;
+    this.fillColor = null;
 
     let coordX = width - MARGIN_X;
     let coordY = random(MARGIN_Y, height - MARGIN_Y);
@@ -12,31 +11,45 @@ class Dot {
     this.coords = createVector(coordX, coordY);
 
     this.isEaten = false;
+    this.onEaten = null;
+
+    this.init();
   }
 
-  randomPower() {
+  init() {
     let rand = random(100);
 
     let GOLD = color(250, 225, 0);
-    let RED = color(255, 150, 150);
+    let RED = color(255, 120, 120);
     let MAGENTA = color(225, 150, 255);
     let CYAN = color('#ADF5E6');
 
-    if (rand < 0.5) {
-      this.power = 100;
+    if (rand < 1) {
+      // LIFE
+      this.onEaten = function () {
+        lives.init();
+      };
+      this.radius = this.defaultRadius;
+      this.fillColor = RED;
+    } else if (rand < 2) {
+      // MEGANUGGET
+      this.onEaten = () => score.add(100); // give 100 points
       this.radius = this.defaultRadius * 1.8;
       this.fillColor = CYAN;
     } else if (rand < 10) {
-      this.power = 20;
+      // GOLDEN NUGGET
+      this.onEaten = () => score.add(20); // give 20 points
       this.radius = this.defaultRadius * 1.5;
       this.fillColor = GOLD;
     } else {
-      this.power = -100;
+      // DEATH
+      this.onEaten = function () {
+        console.log('EAT ME');
+        lives.decrease();
+      };
       this.radius = this.defaultRadius;
       this.fillColor = color(255); // WHITE
     }
-
-    return round(this.power);
   }
 
   moveLeft() {
@@ -48,22 +61,27 @@ class Dot {
 
     if (this.isEaten) {
       noFill();
-      stroke(0, 0, 0, 100);
+      stroke(100);
     } else {
       fill(this.fillColor);
       stroke(0);
     }
+
     circle(this.coords.x, this.coords.y, this.radius);
   }
 
   eat() {
-    if (!this.isEaten) {
-      score.add(this.power);
-      this.isEaten = true;
+    this.isEaten = true;
+    this.onEaten(); // defined on init
+  }
+
+  checkEating() {
+    if (!this.isEaten && dist(trail.head.x, trail.head.y, this.coords.x, this.coords.y) < this.radius) {
+      this.eat();
     }
   }
 
-  isDead() {
+  isObsolete() {
     return this.coords.x < MARGIN_X;
   }
 }
@@ -73,35 +91,29 @@ class Dots {
     this.dots = [];
   }
 
+  init() {
+    this.dots = [];
+  }
+
   update() {
-    this.checkForEating();
+    // check for eating, move left
+    for (let d of this.dots) {
+      d.checkEating();
+      d.moveLeft();
+    }
 
     // add new dots
-    if (IS_PLAYING && frameCount % 20 == 0) {
+    if (gameState.is('PLAYING') && frameCount % 20 === 0) {
       let d = new Dot();
       this.dots.push(d);
     }
 
-    // move left
-    for (let i = 0; i < this.dots.length; i++) {
-      let d = this.dots[i];
-      d.moveLeft();
-    }
-
-    this.dots = this.dots.filter((d) => !d.isDead()); // delete if not in use
+    this.dots = this.dots.filter((d) => !d.isDead); // remove obsolete
   }
 
   render() {
     for (let d of this.dots) {
       d.render();
-    }
-  }
-
-  checkForEating() {
-    for (let d of this.dots) {
-      if (trail.head.dist(d.coords) < d.radius) {
-        d.eat();
-      }
     }
   }
 }
