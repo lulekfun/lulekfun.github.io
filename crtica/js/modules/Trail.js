@@ -18,7 +18,7 @@ class Trail {
   }
 
   update() {
-    if (gameState.is('PLAYING')) {
+    if (GAME_STATE === 'PLAYING') {
       this.dir = mainPressed() ? -1 : 1; // SPACE
     } else {
       if (abs(this.speed) > 5) {
@@ -30,12 +30,8 @@ class Trail {
     this.computeVertices();
     this.moveLeft();
 
-    if (this.isOffScreen()) {
-      gameState.set('GAME_OVER');
-    }
-
-    if (lives.isDead) {
-      gameState.set('GAME_OVER');
+    if (this.isOffScreen() || lives.isDead) {
+      GAME_STATE = 'GAME_OVER';
     }
   }
 

@@ -3,6 +3,8 @@ const SPEED = 3; // 3
 const MARGIN_X = -30;
 const MARGIN_Y = 20;
 
+let GAME_STATE = 'WELCOME';
+
 let trail;
 let dots;
 let score;
@@ -30,15 +32,15 @@ function draw() {
 
   // render: DOTS < TRAIL < LIVES < SCORE
 
-  if (gameState.is('PLAYING')) {
+  if (GAME_STATE === 'PLAYING') {
     dots.render();
     trail.render();
     lives.render();
     score.render();
-  } else if (gameState.is('WELCOME')) {
+  } else if (GAME_STATE === 'WELCOME') {
     trail.render();
     renderWelcome();
-  } else if (gameState.is('GAME_OVER')) {
+  } else if (GAME_STATE === 'GAME_OVER') {
     dots.render();
     trail.render();
     renderGameOver();
@@ -52,15 +54,15 @@ function mainPressed() {
 
 function keyPressed() {
   if (mainPressed()) {
-    if (gameState.is('GAME_OVER')) {
-      gameState.set('WELCOME');
+    if (GAME_STATE === 'GAME_OVER') {
+      GAME_STATE = 'WELCOME';
       score.init();
       lives.init();
       dots.init();
       trail.init();
       loop();
-    } else if (gameState.is('WELCOME')) {
-      gameState.set('PLAYING');
+    } else if (GAME_STATE === 'WELCOME') {
+      GAME_STATE = 'PLAYING';
     }
   }
 }
@@ -88,24 +90,3 @@ function renderGameOver() {
   textAlign(CENTER, CENTER);
   text(`KONEC IGRE\n[${score.SCORE}]`, width / 2, height / 2); // center
 }
-
-const gameState = {
-  STATE: 'WELCOME',
-  states: ['WELCOME', 'PLAYING', 'GAME_OVER'],
-  is(string) {
-    this.checkSpelling(string);
-    return this.STATE === string;
-  },
-  includes(...strings) {
-    // strings == array
-    strings.forEach((s) => this.checkSpelling(s));
-    return strings.includes(this.STATE);
-  },
-  set(string) {
-    this.checkSpelling(string);
-    this.STATE = string;
-  },
-  checkSpelling(string) {
-    if (!this.states.includes(string)) throw new Error('state does not exist');
-  },
-};

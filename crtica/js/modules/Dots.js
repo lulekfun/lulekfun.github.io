@@ -44,7 +44,6 @@ class Dot {
     } else {
       // DEATH
       this.onEaten = function () {
-        console.log('EAT ME');
         lives.decrease();
       };
       this.radius = this.defaultRadius;
@@ -103,7 +102,7 @@ class Dots {
     }
 
     // add new dots
-    if (gameState.is('PLAYING') && frameCount % 20 === 0) {
+    if (GAME_STATE === 'PLAYING' && frameCount % 20 === 0) {
       let d = new Dot();
       this.dots.push(d);
     }

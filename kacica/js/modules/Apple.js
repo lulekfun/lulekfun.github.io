@@ -31,6 +31,7 @@ class Apple {
 
   render() {
     stroke(0, 255, 0);
+    if (GAME_STATE === 'GAME_OVER') stroke(225, 65, 65);
     strokeWeight(this.width);
     point(this.coords.x, this.coords.y);
   }
