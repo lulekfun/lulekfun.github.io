@@ -60,7 +60,7 @@ function keyPressed() {
   }
 
   if (key == 'e') {
-    enemies.new();
+    enemies.new(); // TODO: delete?
   }
 }
 
