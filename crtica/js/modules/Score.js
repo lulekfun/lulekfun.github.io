@@ -1,7 +1,7 @@
 class Score {
   constructor() {
     this.SCORE = 0;
-    this.HIGH_SCORE = 0;
+    this.HIGH_SCORE = 0; // TODO: ne uporablja se
 
     this.KEYWORD = 'CRTICA_HIGH';
   }

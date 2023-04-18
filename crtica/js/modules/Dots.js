@@ -5,8 +5,8 @@ class Dot {
     this.radius = null;
     this.fillColor = null;
 
-    let coordX = width - MARGIN_X;
-    let coordY = random(MARGIN_Y, height - MARGIN_Y);
+    const coordX = width - MARGIN_X;
+    const coordY = random(MARGIN_Y, height - MARGIN_Y);
 
     this.coords = createVector(coordX, coordY);
 
@@ -17,12 +17,12 @@ class Dot {
   }
 
   init() {
-    let rand = random(100);
+    const rand = random(100);
 
-    let GOLD = color(250, 225, 0);
-    let RED = color(255, 120, 120);
-    let MAGENTA = color(225, 150, 255);
-    let CYAN = color('#ADF5E6');
+    const GOLD = color(250, 225, 0);
+    const RED = color(255, 120, 120);
+    const MAGENTA = color(225, 150, 255);
+    const CYAN = color('#ADF5E6');
 
     if (rand < 1) {
       // LIFE
@@ -80,7 +80,7 @@ class Dot {
     }
   }
 
-  isObsolete() {
+  get isDead() {
     return this.coords.x < MARGIN_X;
   }
 }
@@ -103,7 +103,7 @@ class Dots {
 
     // add new dots
     if (GAME_STATE === 'PLAYING' && frameCount % 20 === 0) {
-      let d = new Dot();
+      const d = new Dot();
       this.dots.push(d);
     }
 

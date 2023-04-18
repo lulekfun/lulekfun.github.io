@@ -14,17 +14,13 @@ class Lives {
     this.LIVES = this.defaultLives;
   }
 
-  add(n) {
-    this.LIVES += n;
-  }
-
   decrease() {
-    --this.LIVES;
+    this.LIVES--;
   }
 
   render() {
-    let margin = 15;
-    let locY = margin; // px
+    const margin = 15;
+    const locY = margin; // px
     let locX;
 
     for (let i = 0; i < 3; ++i) {

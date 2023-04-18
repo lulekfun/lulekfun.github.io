@@ -17,12 +17,12 @@ class Player {
       noLoop();
     }
 
-    let diff = DIR * this.speed;
+    const diff = DIR * this.speed;
     this.locX = min(max(this.locX + diff, this.minX), this.maxX);
   }
 
   isDead() {
-    let headLoc = createVector(this.locX, height - this.h);
+    const headLoc = createVector(this.locX, height - this.h);
     return enemies.arr.some((e) => e.isHit(headLoc.x, headLoc.y));
   }
 
