@@ -5,7 +5,7 @@ let COEFF = 1;
 const MARGIN_X = 30; // (px) HALF OF FLOOR WIDTH = 25
 let CAMERA_HEIGHT = 0;
 
-let FLOORS_NO = 5;
+let FLOORS_NO = 4;
 let FLOOR_HEIGHT = 40; // px
 
 let skrat;
@@ -14,15 +14,14 @@ let progress;
 let floors = [];
 let powerups = [];
 
-let prev_millis = 0;
-let delta_millis = 0;
-
 const COLORS = {
-  GOLD: [250, 210, 0],
-  RED: [255, 120, 120],
+  GOLD: [255, 210, 50],
+  SAHARA: [255, 200, 25],
+  ROSE_GOLD: [255, 180, 150],
+  RED: [255, 150, 150],
   MAGENTA: [225, 200, 255],
-  CYAN: [180, 225, 255],
-  SAHARA: '#FFC418',
+  SKY_BLUE: [180, 225, 255],
+  MOLD: [180, 230, 210],
 };
 
 function setup() {
@@ -39,9 +38,13 @@ function draw() {
 
   // update
   skrat.update();
-  CAMERA_HEIGHT = lerp(CAMERA_HEIGHT, max(0, skrat.level - height / 3), 0.05);
   progress.set(skrat.level / FLOOR_HEIGHT);
-  // ground.y = CAMERA_HEIGHT = max(0, skrat.max_y - height / 3);
+  if (skrat.pos.y < skrat.level) {
+    const camera_speed = skrat.pos.y === 0 ? 0.01 : 0.15;
+    CAMERA_HEIGHT = lerp(CAMERA_HEIGHT, max(0, skrat.pos.y - height / 3), camera_speed); // falling down
+  } else {
+    CAMERA_HEIGHT = lerp(CAMERA_HEIGHT, max(0, skrat.level - height / 3), 0.05); // keeping up
+  }
 
   // render
   background(255);
@@ -49,9 +52,6 @@ function draw() {
   floors.forEach((f) => f.render());
   skrat.render();
   progress.render();
-
-  delta_millis = millis() - prev_millis;
-  prev_millis = millis();
 }
 
 function init() {

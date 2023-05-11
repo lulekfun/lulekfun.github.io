@@ -23,11 +23,6 @@ class Agent {
   initImg() {
     this.img_width = this.img.width * this.img_scale;
     this.img_height = this.img.height * this.img_scale;
-
-    //this.top = this.pos.y - this.img_height/2;
-    //this.bottom = this.pos.y + this.img_height/2;
-    //this.left = this.pos.x - this.img_width/2;
-    //this.right = this.pos.x + this.img_width/2;
   }
 
   update() {
@@ -51,8 +46,9 @@ class Agent {
             this.prev_pos.x - this.img_width / 2,
             this.prev_pos.y, // - this.img_height/2,
             this.pos.x - this.img_width / 2,
-            this.pos.y, // - this.img_height/2,
-
+            this.pos.y // - this.img_height/2,
+          ) ||
+          f.crosses(
             // right bottom border (prev -> cur)
             this.prev_pos.x + this.img_width / 2,
             this.prev_pos.y, // + this.img_height/2,
@@ -63,6 +59,7 @@ class Agent {
           this.pos.y = f.y;
           this.level = f.y;
           this.y_speed = this.y_power;
+
           break;
         }
       }

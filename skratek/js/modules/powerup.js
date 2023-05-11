@@ -1,17 +1,21 @@
 class Powerup {
   constructor(x, y) {
     this.floor_offset = 12; // px
-    this.loc = { x, y: y + this.floor_offset };
+    this.pos = { x, y: y + this.floor_offset };
 
-    this.color = color(COLORS.CYAN);
+    this.color = color(COLORS.SKY_BLUE);
     this.is_collected = false;
+  }
+
+  get is_visible() {
+    return this.pos.y > CAMERA_HEIGHT && this.pos.y < CAMERA_HEIGHT + height;
   }
 
   checkCollect(x, y) {
     if (this.is_collected) return;
 
     const MAX_DISTANCE = 15;
-    const collecting = dist(x, y, this.loc.x, this.loc.y) < MAX_DISTANCE;
+    const collecting = dist(x, y, this.pos.x, this.pos.y) < MAX_DISTANCE;
 
     if (collecting) {
       this.is_collected = true;
@@ -20,14 +24,15 @@ class Powerup {
   }
 
   onCollect() {
-    this.color.setAlpha(80);
-    // this.color = color(COLORS.MAGENTA);
+    this.color.setAlpha(80); // this.color = color(COLORS.MAGENTA);
   }
 
   render() {
+    if (!this.is_visible) return;
+
     stroke(this.color);
     strokeWeight(7);
-    point(this.loc.x, CAMERA_HEIGHT + height - this.loc.y);
+    point(this.pos.x, CAMERA_HEIGHT + height - this.pos.y);
   }
 }
 
@@ -41,10 +46,10 @@ class Goal extends Powerup {
   onCollect() {
     FLOORS_NO *= 2;
   }
-  
+
   render() {
     if (this.is_collected) {
-      this.radius++;
+      this.radius += COEFF;
 
       const alpha = 360 - this.radius;
       this.color.setAlpha(alpha);
@@ -54,6 +59,6 @@ class Goal extends Powerup {
 
     noStroke();
     fill(this.color);
-    circle(this.loc.x, CAMERA_HEIGHT + height - this.loc.y, this.radius);
+    circle(this.pos.x, CAMERA_HEIGHT + height - this.pos.y, this.radius);
   }
 }

@@ -8,6 +8,10 @@ class Floor {
     // this.end = this.x + this.width / 2;
   }
 
+  get is_visible() {
+    return this.y > CAMERA_HEIGHT && this.y < CAMERA_HEIGHT + height;
+  }
+
   get start() {
     return this.x - this.width / 2;
   }
@@ -16,16 +20,13 @@ class Floor {
     return this.x + this.width / 2;
   }
 
-  crosses(x1, y1, x2, y2, x3, y3, x4, y4) {
-    // preveri, ali seka leva stranca ali desna stranica (paralelogram)
-    // 1 in 2 leva stranica, 3 in 4 desna
-    return (
-      intersects(x1, y1, x2, y2, this.start, this.y, this.end, this.y) ||
-      intersects(x3, y3, x4, y4, this.start, this.y, this.end, this.y)
-    );
+  crosses(x1, y1, x2, y2) {
+    return intersects(x1, y1, x2, y2, this.start, this.y, this.end, this.y);
   }
 
   render() {
+    if (!this.is_visible) return; // do not render but also not break
+
     strokeCap(SQUARE);
     stroke(0);
     strokeWeight(3);
