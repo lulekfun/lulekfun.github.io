@@ -1,0 +1,36 @@
+html {
+  height: 100%;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+
+  display: flex;
+  place-content: center;
+  place-items: center;
+
+  flex-direction: column;
+}
+
+canvas {
+  border: 3px solid;
+}
+
+progress {
+  appearance: none;
+  -webkit-appearance: none;
+
+  margin-top: 2rem;
+  width: 180px;
+  height: 3px;
+}
+
+progress[value]::-webkit-progress-bar {
+  background-color: #ddd;
+}
+
+progress[value]::-webkit-progress-value {
+  background: #000;
+}

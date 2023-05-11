@@ -10,6 +10,7 @@ let FLOOR_HEIGHT = 40; // px
 
 let skrat;
 let ground;
+let progress;
 let floors = [];
 let powerups = [];
 
@@ -39,6 +40,7 @@ function draw() {
   // update
   skrat.update();
   CAMERA_HEIGHT = lerp(CAMERA_HEIGHT, max(0, skrat.level - height / 3), 0.05);
+  progress.set(skrat.level / FLOOR_HEIGHT);
   // ground.y = CAMERA_HEIGHT = max(0, skrat.max_y - height / 3);
 
   // render
@@ -46,6 +48,7 @@ function draw() {
   powerups.forEach((p) => p.render());
   floors.forEach((f) => f.render());
   skrat.render();
+  progress.render();
 
   delta_millis = millis() - prev_millis;
   prev_millis = millis();
@@ -56,6 +59,7 @@ function init() {
   floors = [];
   powerups = [];
   skrat = new Agent();
+  progress = new Progress(FLOORS_NO);
   ground = new Floor(width / 2, 0, width);
 
   // prepare everything
