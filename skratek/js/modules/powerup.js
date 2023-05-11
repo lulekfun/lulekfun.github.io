@@ -21,7 +21,7 @@ class Powerup {
 
   onCollect() {
     this.color.setAlpha(80);
-    // this.color = color(...COLORS.MAGENTA);
+    // this.color = color(COLORS.MAGENTA);
   }
 
   render() {
