@@ -4,6 +4,7 @@ const MARGIN_X = -30;
 const MARGIN_Y = 20;
 
 let GAME_STATE = 'WELCOME';
+let COEFF;
 
 let trail;
 let dots;
@@ -22,6 +23,8 @@ function setup() {
 }
 
 function draw() {
+  COEFF = minmax(60 / frameRate(), 1, 2);
+
   // --- COMPUTE
 
   trail.update();
@@ -89,4 +92,10 @@ function renderGameOver() {
   textStyle(BOLD);
   textAlign(CENTER, CENTER);
   text(`KONEC IGRE\n[${score.SCORE}]`, width / 2, height / 2); // center
+}
+
+// --- UTILS
+
+function minmax(val, min_val, max_val) {
+  return min(max_val, max(min_val, val));
 }

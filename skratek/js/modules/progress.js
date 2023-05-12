@@ -1,47 +1,25 @@
 class Progress {
-  constructor(max) {
+  constructor() {
     this.element = document.querySelector('progress');
 
-    this.min = 0;
-    this.max = max || 100; // 100
     this.value = 0;
+    this.target_value = 0;
 
-    this.element.max = this.max;
-    this.element.value = this.value;
-
-    this.targetValue = 0;
-  }
-
-  get isFull() {
-    return this.value >= this.max;
+    this.element.value = 0;
+    this.element.max = 1;
   }
 
   update() {
-    // progress
-    if (this.isFull) {
-      powerups.random();
-      progress.reset();
-      ++LEVEL;
-    }
-  }
-
-  add(val) {
-    this.targetValue = max(0, this.targetValue + val);
-  }
-
-  set(val) {
-    this.targetValue = val;
-  }
-
-  reset() {
-    this.targetValue = 0;
+    this.target_value = skrat.floor / FLOOR_HEIGHT / FLOORS_NO;
   }
 
   render() {
-    this.value = lerp(this.value, this.targetValue, 0.1);
+    this.value = lerp(this.value, this.target_value, 0.1);
     this.element.value = this.value;
   }
 }
+
+// --- UTILS
 
 function sign(n) {
   if (n === 0) return 0;
