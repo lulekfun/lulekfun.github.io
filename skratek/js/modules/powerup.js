@@ -2,13 +2,26 @@ const powerups = {
   goal: null,
   arr: [],
   get all_collected() {
-    return this.arr.every((p) => p.is_collected);
+    return this.arr.every((p) => p.ignore_collect || p.is_collected);
   },
   init() {
     this.arr = [];
-  },
-  add(powerup) {
-    this.arr.push(powerup);
+
+    for (let i = 6; i < floors.arr.length; i += 7) {
+      const fl = floors.arr[i];
+      const pw = LEVEL > 2 && random() < 0.1 ? new NaughtyBall(fl) : new Powerup(fl);
+      this.arr.push(pw);
+      fl.powerup = pw;
+    }
+
+    // TODO: mora bit collected za GOAL .. potem bi moral naredit posebej arr naughty_balls
+    // if (this.arr.length > 2) {
+    //   const middle_index = floor(this.arr.length / 2);
+    //   const fl = this.arr[middle_index].floor;
+    //   this.arr[middle_index] = new NaughtyBall(fl.pos.x, fl.pos.y, fl);
+    // }
+
+    this.goal = new Goal(floors.podium);
   },
   update() {
     for (let p of this.arr) {
@@ -31,12 +44,17 @@ const powerups = {
 // --- CLASS DECLARATIONS
 
 class Powerup {
-  constructor(x, y) {
+  constructor(floor) {
     this.floor_offset = 12; // px
-    this.pos = { x, y: y + this.floor_offset };
+    this.pos = {
+      x: floor.pos.x,
+      y: floor.pos.y + this.floor_offset,
+    };
 
     this.color = color(COLORS.MOLD);
     this.is_collected = false;
+
+    this.floor = floor;
   }
 
   get is_visible() {
@@ -67,8 +85,8 @@ class Powerup {
 }
 
 class Goal extends Powerup {
-  constructor(x, y) {
-    super(x, y);
+  constructor(floor) {
+    super(floor);
     this.color = color(COLORS.ROSE_GOLD);
     this.radius = 7;
   }
@@ -91,5 +109,25 @@ class Goal extends Powerup {
     noStroke();
     fill(this.color);
     circle(this.pos.x, CAMERA_HEIGHT + height - this.pos.y, this.radius);
+  }
+}
+
+class NaughtyBall extends Powerup {
+  constructor(floor) {
+    super(floor);
+    this.color = color(COLORS.RED);
+
+    this.ignore_collect = true;
+  }
+
+  onCollect() {
+    this.is_collected = true;
+    this.color.setAlpha(80); // this.color = color(COLORS.MAGENTA);
+
+    const type = random(['SHRINK', 'REVERSE', 'BUTTER']);
+
+    if (type === 'SHRINK') floors.arr.forEach((f) => (f.width = 30));
+    else if (type === 'REVERSE') skrat.x_max_speed = -skrat.x_max_speed;
+    else if (type === 'BUTTER') FRICTION = 0.04;
   }
 }

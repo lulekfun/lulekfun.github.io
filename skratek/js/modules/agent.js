@@ -1,5 +1,5 @@
-const GRAVITY = 0.3;
-const FRICTION = 0.15; // 0 -> 1; 0.2
+let GRAVITY = 0.3;
+let FRICTION = 0.15; // 0 -> 1 [0.15]
 
 class Agent {
   constructor() {

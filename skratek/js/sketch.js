@@ -2,8 +2,8 @@ let COEFF = 1;
 let CAMERA_HEIGHT = 0;
 const MARGIN_X = 30; // (px) HALF OF FLOOR WIDTH = 25
 
-let LEVEL = 0;
-let FLOORS_NO = 4;
+let LEVEL = 0; // starts with 0
+let FLOORS_NO = 0;
 let FLOOR_HEIGHT = 40; // px
 
 let skrat;
@@ -66,9 +66,12 @@ function init() {
   ++LEVEL;
   FLOORS_NO = floor(5 * LEVEL ** 1.2);
 
+  GRAVITY = 0.3;
+  FRICTION = 0.15;
+
   skrat = new Agent();
-  powerups.init(); // before floors!
   floors.init();
+  powerups.init(); // after floors!
 }
 
 // --- UTILS

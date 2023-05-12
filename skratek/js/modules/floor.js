@@ -1,6 +1,7 @@
 const floors = {
   arr: [],
   ground: null,
+  podium: null,
   init() {
     this.arr = [];
     this.ground = new Floor(width / 2, 0, width);
@@ -18,27 +19,20 @@ const floors = {
       else if (floor_type === 'SHY') fl = new ShyFloor(x, y);
 
       this.arr.push(fl);
-
-      if (i !== FLOORS_NO && i % 8 === 0) {
-        const pw = new Powerup(x, y);
-        powerups.add(pw);
-        fl.powerup = pw;
-      }
     }
 
-    const podium = new Floor(width / 2, FLOORS_NO * FLOOR_HEIGHT); // last one is centered
-    this.arr.push(podium);
-    powerups.goal = new Goal(podium.pos.x, podium.pos.y);
+    this.podium = new Floor(width / 2, FLOORS_NO * FLOOR_HEIGHT); // last one is centered
   },
   update() {
     this.ground.update();
+    this.podium.update();
 
-    for (let f of this.arr) {
+    for (let f of [this.ground, ...this.arr, this.podium]) {
       if (f.is_visible) f.update();
     }
   },
   render() {
-    for (let f of this.arr) {
+    for (let f of [...this.arr, this.podium]) {
       if (f.is_visible) f.render();
     }
   },
@@ -169,10 +163,3 @@ function randomFloorType(floor_no) {
   }
   return 'NORMAL';
 }
-
-// function test() {
-//   for (let floor_no = 0; floor_no < 200; floor_no++) {
-//     const probability = map(minmax(floor_no, 30, 100), 30, 100, 0.05, 0.2);
-//     console.log(floor_no, probability);
-//   }
-// }
