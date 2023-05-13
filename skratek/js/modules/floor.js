@@ -117,6 +117,11 @@ class Ground extends Floor {
   update() {
     this.checkIntersection();
   }
+
+  onIntersection() {
+    skrat.jump(this.pos.x, this.pos.y);
+    heal(); // HEAL .. remove naughty side effects
+  }
 }
 
 class MovingFloor extends Floor {

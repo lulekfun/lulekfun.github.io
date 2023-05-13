@@ -62,7 +62,7 @@ function draw() {
 }
 
 function init() {
-  ++LEVEL;
+  ++LEVEL; // TODO: raje pri powerup? malo je vseeno hecno
   FLOORS_NO = floor(5 * LEVEL ** 1.5);
 
   GRAVITY = 0.3;
@@ -72,6 +72,15 @@ function init() {
   skrat = new Agent();
   floors.init();
   powerups.init(); // after floors!
+}
+
+function heal() {
+  GRAVITY = 0.3;
+  FRICTION = 0.15;
+  REVERSE = 1;
+  FLOOR_WIDTH = 40;
+
+  // powerups.init(); // NOTE: vprasaj larico, kaj ji je boljse
 }
 
 // --- UTILS
