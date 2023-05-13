@@ -14,7 +14,7 @@ const powerups = {
       fl.powerup = pw;
     }
 
-    this.goal = LEVEL === 20 ? new TerminalGoal(floors.podium) : new Goal(floors.podium);
+    this.goal = LEVEL === 10 ? new TerminalGoal(floors.podium) : new Goal(floors.podium);
   },
   update() {
     for (let p of this.arr) {
