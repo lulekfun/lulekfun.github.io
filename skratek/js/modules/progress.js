@@ -10,11 +10,11 @@ class Progress {
   }
 
   update() {
-    this.target_value = skrat.floor / FLOOR_HEIGHT / FLOORS_NO;
+    this.target_value = skrat.level / FLOOR_HEIGHT / FLOORS_NO;
   }
 
   render() {
-    this.value = lerp(this.value, this.target_value, 0.1);
+    this.value = lerp(this.value, this.target_value, 0.1 * COEFF);
     this.element.value = this.value;
   }
 }

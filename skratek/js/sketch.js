@@ -4,7 +4,7 @@ const MARGIN_X = 30; // (px) HALF OF FLOOR WIDTH = 25
 
 let LEVEL = 0; // starts with 0
 let FLOORS_NO = 0;
-let FLOOR_HEIGHT = 40; // px
+const FLOOR_HEIGHT = 40; // px
 
 let skrat;
 let ground;
@@ -16,7 +16,10 @@ const COLORS = {
   ROSE_GOLD: [255, 180, 150],
   RED: [255, 150, 150],
   MAGENTA: [225, 200, 255],
+  VIOLET: [190, 190, 255],
+  PINK: [255, 200, 200],
   SKY_BLUE: [180, 225, 255],
+  DEEP_BLUE: [150, 190, 255],
   MOLD: [180, 230, 210],
 };
 
@@ -43,11 +46,11 @@ function draw() {
   powerups.update();
   progress.update();
 
-  if (skrat.pos.y < skrat.level) {
+  if (skrat.pos.y < skrat.floor) {
     const camera_speed = skrat.pos.y === 0 ? 0.01 : 0.15;
     CAMERA_HEIGHT = lerp(CAMERA_HEIGHT, max(0, skrat.pos.y - height / 3), camera_speed); // falling down
   } else {
-    CAMERA_HEIGHT = lerp(CAMERA_HEIGHT, max(0, skrat.level - height / 3), 0.05); // keeping up
+    CAMERA_HEIGHT = lerp(CAMERA_HEIGHT, max(0, skrat.floor - height / 3), 0.05); // keeping up
   }
 
   // -- render
@@ -56,18 +59,15 @@ function draw() {
   floors.render();
   skrat.render();
   progress.render();
-
-  // -- testing
-  // stroke(255, 0, 0, 100);
-  // line(0, CAMERA_HEIGHT + height - skrat.floor, width, CAMERA_HEIGHT + height - skrat.floor);
 }
 
 function init() {
   ++LEVEL;
-  FLOORS_NO = floor(5 * LEVEL ** 1.2);
+  FLOORS_NO = floor(5 * LEVEL ** 1.5);
 
   GRAVITY = 0.3;
   FRICTION = 0.15;
+  FLOOR_WIDTH = 40;
 
   skrat = new Agent();
   floors.init();

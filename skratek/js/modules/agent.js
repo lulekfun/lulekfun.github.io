@@ -16,7 +16,7 @@ class Agent {
     this.y_power = 6; // JUMP POWER
     this.y_speed = this.y_power; // START POWER; changes with bouncing
     this.max_y = 0;
-    this.level = 0;
+    this.floor = 0;
 
     this.img = loadImage(`./img/skratek_prozoren.png`, this.initImg.bind(this));
     this.img_scale = 2;
@@ -26,8 +26,8 @@ class Agent {
     return keyIsDown(RIGHT_ARROW) - keyIsDown(LEFT_ARROW);
   }
 
-  get floor() {
-    if (this.pos.y > this.level) return this.level;
+  get level() {
+    if (this.pos.y > this.floor) return this.floor;
     return this.pos.y - (this.pos.y % FLOOR_HEIGHT);
   }
 
@@ -38,7 +38,7 @@ class Agent {
 
   jump(x, y) {
     this.pos.y = y;
-    this.level = y;
+    this.floor = y;
     this.y_speed = this.y_power;
   }
 
@@ -46,13 +46,13 @@ class Agent {
     this.prev_pos = { ...this.pos };
 
     // compute x position
-    this.x_speed = lerp(this.x_speed, this.x_max_speed * this.x_dir * COEFF, FRICTION);
+    this.x_speed = lerp(this.x_speed, this.x_max_speed * this.x_dir * COEFF, FRICTION * COEFF);
     this.pos.x = (this.pos.x + this.x_speed + width) % width;
 
     if (powerups.goal.is_collected) {
       // finished => move slowly into center
       this.x_max_speed = 0;
-      this.pos.x = lerp(this.pos.x, width / 2, 0.01);
+      this.pos.x = lerp(this.pos.x, width / 2, 0.01 * COEFF);
     }
 
     // compute y position

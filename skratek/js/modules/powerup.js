@@ -14,22 +14,15 @@ const powerups = {
       fl.powerup = pw;
     }
 
-    // TODO: mora bit collected za GOAL .. potem bi moral naredit posebej arr naughty_balls
-    // if (this.arr.length > 2) {
-    //   const middle_index = floor(this.arr.length / 2);
-    //   const fl = this.arr[middle_index].floor;
-    //   this.arr[middle_index] = new NaughtyBall(fl.pos.x, fl.pos.y, fl);
-    // }
-
-    this.goal = new Goal(floors.podium);
+    this.goal = LEVEL === 20 ? new TerminalGoal(floors.podium) : new Goal(floors.podium);
   },
   update() {
     for (let p of this.arr) {
-      if (!p.is_visible) continue;
-      p.checkCollect(skrat.pos.x, skrat.pos.y);
+      if (!p.is_visible || p.is_collected) continue;
+      p.update();
     }
 
-    this.goal.checkCollect(skrat.pos.x, skrat.pos.y);
+    this.goal.update();
   },
   render() {
     for (let p of this.arr) {
@@ -61,11 +54,15 @@ class Powerup {
     return this.pos.y > CAMERA_HEIGHT && this.pos.y < CAMERA_HEIGHT + height;
   }
 
-  checkCollect(x, y) {
-    if (this.is_collected) return;
+  update() {
+    this.checkCollect();
+  }
+
+  checkCollect() {
+    if (this.is_collected) return; // TODO: remove? je ze v loopu
 
     const MAX_DISTANCE = 15;
-    const collecting = dist(x, y, this.pos.x, this.pos.y) < MAX_DISTANCE;
+    const collecting = dist(skrat.pos.x, skrat.pos.y, this.pos.x, this.pos.y) < MAX_DISTANCE;
 
     if (collecting) {
       this.onCollect();
@@ -96,19 +93,44 @@ class Goal extends Powerup {
     this.is_collected = true;
   }
 
-  render() {
+  update() {
+    this.checkCollect();
+
     if (this.is_collected) {
       this.radius += COEFF;
 
       const alpha = 360 - this.radius;
       this.color.setAlpha(alpha);
 
-      if (alpha < -50) return init();
+      if (alpha < -50) init();
     }
+  }
 
+  render() {
     noStroke();
     fill(this.color);
     circle(this.pos.x, CAMERA_HEIGHT + height - this.pos.y, this.radius);
+  }
+}
+
+class TerminalGoal extends Goal {
+  constructor(floor) {
+    super(floor);
+    this.color = color(COLORS.VIOLET);
+    this.radius = 7;
+  }
+
+  update() {
+    this.checkCollect();
+
+    if (this.is_collected) {
+      this.radius += COEFF;
+
+      const alpha = 360 - this.radius;
+      this.color.setAlpha(alpha);
+
+      if (alpha < 0) this.radius = 0;
+    }
   }
 }
 
@@ -126,8 +148,8 @@ class NaughtyBall extends Powerup {
 
     const type = random(['SHRINK', 'REVERSE', 'BUTTER']);
 
-    if (type === 'SHRINK') floors.arr.forEach((f) => (f.width = 30));
+    if (type === 'SHRINK') FLOOR_WIDTH *= 0.8;
     else if (type === 'REVERSE') skrat.x_max_speed = -skrat.x_max_speed;
-    else if (type === 'BUTTER') FRICTION = 0.04;
+    else if (type === 'BUTTER') FRICTION /= 2;
   }
 }

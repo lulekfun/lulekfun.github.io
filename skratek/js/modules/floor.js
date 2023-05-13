@@ -1,10 +1,13 @@
+let FLOOR_WIDTH = 40;
+
 const floors = {
   arr: [],
   ground: null,
   podium: null,
   init() {
     this.arr = [];
-    this.ground = new Floor(width / 2, 0, width);
+    this.ground = new Ground(width / 2, 0, width);
+    this.ground.is_visible = false;
 
     // prepare everything
     this.arr.push(new Floor(width - width / 5, FLOOR_HEIGHT)); // first floor
@@ -42,7 +45,7 @@ const floors = {
 
 class Floor {
   constructor(x, y, w) {
-    this.width = w || 40; // 30: hard
+    this.width = w || FLOOR_WIDTH; // 40
     this.pos = { x, y };
   }
 
@@ -58,8 +61,9 @@ class Floor {
     return this.pos.x + this.width / 2;
   }
 
-  intersects(x1, y1, x2, y2) {
-    return linesIntersect(x1, y1, x2, y2, this.start, this.pos.y, this.end, this.pos.y);
+  update() {
+    this.width = lerp(this.width, FLOOR_WIDTH, 0.1);
+    this.checkIntersection();
   }
 
   checkIntersection() {
@@ -87,12 +91,12 @@ class Floor {
     }
   }
 
-  onIntersection() {
-    skrat.jump(this.pos.x, this.pos.y);
+  intersects(x1, y1, x2, y2) {
+    return linesIntersect(x1, y1, x2, y2, this.start, this.pos.y, this.end, this.pos.y);
   }
 
-  update() {
-    this.checkIntersection();
+  onIntersection() {
+    skrat.jump(this.pos.x, this.pos.y);
   }
 
   render() {
@@ -102,6 +106,16 @@ class Floor {
     noFill();
 
     line(this.start, CAMERA_HEIGHT + height - this.pos.y, this.end, CAMERA_HEIGHT + height - this.pos.y);
+  }
+}
+
+class Ground extends Floor {
+  constructor(x, y, w) {
+    super(x, y, w);
+  }
+
+  update() {
+    this.checkIntersection();
   }
 }
 
