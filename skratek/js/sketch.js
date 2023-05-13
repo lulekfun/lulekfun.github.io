@@ -63,7 +63,7 @@ function draw() {
 
 function init() {
   ++LEVEL; // TODO: raje pri powerup? malo je vseeno hecno
-  FLOORS_NO = floor(5 * LEVEL ** 1.5);
+  FLOORS_NO = floor(2 ** ((LEVEL + 6) / 2)) - 6;
 
   GRAVITY = 0.3;
   FRICTION = 0.15;
