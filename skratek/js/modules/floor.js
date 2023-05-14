@@ -174,11 +174,11 @@ function linesIntersect(a, b, c, d, p, q, r, s) {
 }
 
 function randomFloorType(floor_no) {
-  // pri 30 je 5% verjetnost, pri 100 pa 20%
-  const probability = map(minmax(floor_no, 30, 100), 30, 100, 0.05, 0.2);
+  // pri 20 je 0% verjetnost, pri 250 pa 50%
+  const probability = map(floor_no, 20, 250, 0, 0.5);
 
-  if (floor_no > 30 && random() < probability) {
-    return random() < 0.5 ? 'MOVING' : 'SHY';
+  if (random() < probability) {
+    return random(['MOVING', 'SHY']);
   }
   return 'NORMAL';
 }

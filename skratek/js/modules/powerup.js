@@ -149,7 +149,7 @@ class NaughtyBall extends Powerup {
     const type = random(['SHRINK', 'REVERSE', 'BUTTER']);
 
     if (type === 'SHRINK') FLOOR_WIDTH *= 0.8;
-    else if (type === 'REVERSE') REVERSE = -1;
+    else if (type === 'REVERSE') REVERSE *= -1;
     else if (type === 'BUTTER') FRICTION /= 2;
   }
 }
