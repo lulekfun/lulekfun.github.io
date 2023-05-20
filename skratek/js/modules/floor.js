@@ -20,6 +20,7 @@ const floors = {
       if (floor_type === 'NORMAL') fl = new Floor(x, y);
       else if (floor_type === 'MOVING') fl = new MovingFloor(x, y);
       else if (floor_type === 'SHY') fl = new ShyFloor(x, y);
+      else if (floor_type === 'MIRROR') fl = new MirrorFloor(x, y);
 
       this.arr.push(fl);
     }
@@ -31,7 +32,7 @@ const floors = {
     this.podium.update();
 
     for (let f of [this.ground, ...this.arr, this.podium]) {
-      if (f.is_visible) f.update();
+      if (f.is_visible || skrat.falling) f.update();
     }
   },
   render() {
@@ -50,7 +51,7 @@ class Floor {
   }
 
   get is_visible() {
-    return this.pos.y > CAMERA_HEIGHT && this.pos.y < CAMERA_HEIGHT + height;
+    return this.pos.y + 10 > CAMERA_HEIGHT && this.pos.y - 10 < CAMERA_HEIGHT + height;
   }
 
   get start() {
@@ -68,7 +69,6 @@ class Floor {
 
   checkIntersection() {
     if (skrat.y_speed >= 0) return;
-    if (skrat.pos.y > this.pos.y || skrat.pos.y < this.pos.y - 200) return;
 
     const crossing =
       this.intersects(
@@ -128,11 +128,15 @@ class MovingFloor extends Floor {
   constructor(x, y, w, dir) {
     super(x, y, w);
 
-    this.dir = dir || random() < 0.5 ? 1 : -1;
+    this.offset = x;
+    this.dir = dir || random([-1, 1]);
   }
 
   update() {
-    this.pos.x = -this.width + ((this.pos.x + this.dir * COEFF + width + 3 * this.width) % (width + 2 * this.width));
+    this.width = lerp(this.width, FLOOR_WIDTH, 0.1);
+
+    this.offset = (width + this.offset + COEFF * this.dir) % width;
+    this.pos.x = map(this.offset, 0, width, -this.width / 2, width + this.width / 2);
     if (this.powerup) this.powerup.pos.x = this.pos.x;
 
     this.checkIntersection();
@@ -147,9 +151,12 @@ class ShyFloor extends Floor {
   }
 
   update() {
-    this.checkIntersection();
+    this.width = lerp(this.width, FLOOR_WIDTH, 0.1);
+
     this.pos.x = lerp(this.pos.x, this.target_x, 0.1);
     if (this.powerup) this.powerup.pos.x = this.pos.x;
+
+    this.checkIntersection();
   }
 
   onIntersection() {
@@ -158,27 +165,47 @@ class ShyFloor extends Floor {
   }
 }
 
+class MirrorFloor extends Floor {
+  constructor(x, y, w) {
+    super(x, y, w);
+
+    this.offset = x - width / 2;
+  }
+
+  update() {
+    this.width = lerp(this.width, FLOOR_WIDTH, 0.1);
+
+    const reverse_x = (this.offset - skrat.pos.x + 2 * width) % width;
+    this.pos.x = map(reverse_x, 0, width, -this.width / 2, width + this.width / 2);
+    if (this.powerup) this.powerup.pos.x = this.pos.x;
+
+    this.checkIntersection();
+  }
+}
+
 // --- UTILS
 
 function linesIntersect(a, b, c, d, p, q, r, s) {
   // returns true if the line from (a,b)->(c,d) intersects with (p,q)->(r,s)
-  var det, gamma, lambda;
-  det = (c - a) * (s - q) - (r - p) * (d - b);
-  if (det === 0) {
-    return false;
-  } else {
-    lambda = ((s - q) * (r - a) + (p - r) * (s - b)) / det;
-    gamma = ((b - d) * (r - a) + (c - a) * (s - b)) / det;
-    return 0 <= lambda && lambda <= 1 && 0 <= gamma && gamma <= 1;
-  }
+  const det = (c - a) * (s - q) - (r - p) * (d - b);
+  if (det === 0) return false;
+
+  const lambda = ((s - q) * (r - a) + (p - r) * (s - b)) / det;
+  const gamma = ((b - d) * (r - a) + (c - a) * (s - b)) / det;
+  return 0 <= lambda && lambda <= 1 && 0 <= gamma && gamma <= 1;
 }
 
 function randomFloorType(floor_no) {
   // pri 20 je 0% verjetnost, pri 250 pa 50%
   const probability = map(floor_no, 20, 250, 0, 0.5);
 
+  // return 'MOVING';
+  // return random(['MIRROR', 'NORMAL']);
+
+  if (floor_no >= floorsNo(MAX_LEVEL) - 20) return 'MOVING';
+
   if (random() < probability) {
-    return random(['MOVING', 'SHY']);
+    return random(['MOVING', 'SHY', 'MIRROR']);
   }
   return 'NORMAL';
 }

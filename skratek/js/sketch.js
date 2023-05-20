@@ -2,8 +2,9 @@ let COEFF = 1;
 let CAMERA_HEIGHT = 0;
 const MARGIN_X = 30; // (px) HALF OF FLOOR WIDTH = 25
 
-let LEVEL = 0; // starts with 0
+let LEVEL = 10; // starts with 1
 let FLOORS_NO = 0;
+const MAX_LEVEL = 10;
 const FLOOR_HEIGHT = 40; // px
 
 let skrat;
@@ -46,7 +47,7 @@ function draw() {
   powerups.update();
   progress.update();
 
-  if (skrat.pos.y < skrat.floor) {
+  if (skrat.falling) {
     const camera_speed = skrat.pos.y === 0 ? 0.01 : 0.15;
     CAMERA_HEIGHT = lerp(CAMERA_HEIGHT, max(0, skrat.pos.y - height / 3), camera_speed); // falling down
   } else {
@@ -62,8 +63,7 @@ function draw() {
 }
 
 function init() {
-  ++LEVEL; // TODO: raje pri powerup? malo je vseeno hecno
-  FLOORS_NO = floor(2 ** ((LEVEL + 6) / 2)) - 6;
+  FLOORS_NO = floorsNo(LEVEL);
 
   GRAVITY = 0.3;
   FRICTION = 0.15;
@@ -77,13 +77,17 @@ function init() {
 function heal() {
   GRAVITY = 0.3;
   FRICTION = 0.15;
-  REVERSE = 1;
+  DIR = 1;
   FLOOR_WIDTH = 40;
 
   // powerups.init(); // NOTE: vprasaj larico, kaj ji je boljse
 }
 
 // --- UTILS
+
+function floorsNo(x) {
+  return floor(2 ** ((x + 6) / 2)) - 6;
+}
 
 function minmax(val, min_val, max_val) {
   return min(max_val, max(min_val, val));

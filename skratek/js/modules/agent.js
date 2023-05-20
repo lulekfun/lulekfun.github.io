@@ -1,6 +1,6 @@
 let GRAVITY = 0.3;
 let FRICTION = 0.15; // 0 -> 1 [0.15]
-let REVERSE = 1; // -1 if reversed
+let DIR = 1; // -1 if reversed
 
 class Agent {
   constructor() {
@@ -24,7 +24,11 @@ class Agent {
   }
 
   get x_dir() {
-    return REVERSE * (keyIsDown(RIGHT_ARROW) - keyIsDown(LEFT_ARROW));
+    return DIR * (keyIsDown(RIGHT_ARROW) - keyIsDown(LEFT_ARROW));
+  }
+
+  get falling() {
+    return this.pos.y < this.floor;
   }
 
   get level() {

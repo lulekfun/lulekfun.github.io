@@ -14,7 +14,7 @@ const powerups = {
       fl.powerup = pw;
     }
 
-    this.goal = LEVEL === 10 ? new TerminalGoal(floors.podium) : new Goal(floors.podium);
+    this.goal = LEVEL === MAX_LEVEL ? new TerminalGoal(floors.podium) : new Goal(floors.podium);
   },
   update() {
     for (let p of this.arr) {
@@ -91,6 +91,7 @@ class Goal extends Powerup {
   onCollect() {
     if (!powerups.all_collected) return;
     this.is_collected = true;
+    LEVEL++;
   }
 
   update() {
@@ -149,7 +150,7 @@ class NaughtyBall extends Powerup {
     const type = random(['SHRINK', 'REVERSE', 'BUTTER']);
 
     if (type === 'SHRINK') FLOOR_WIDTH *= 0.8;
-    else if (type === 'REVERSE') REVERSE *= -1;
+    else if (type === 'REVERSE') DIR *= -1;
     else if (type === 'BUTTER') FRICTION /= 2;
   }
 }
