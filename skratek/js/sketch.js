@@ -2,7 +2,7 @@ let COEFF = 1;
 let CAMERA_HEIGHT = 0;
 const MARGIN_X = 30; // (px) HALF OF FLOOR WIDTH = 25
 
-let LEVEL = 10; // starts with 1
+let LEVEL = 1; // starts with 1
 let FLOORS_NO = 0;
 const MAX_LEVEL = 10;
 const FLOOR_HEIGHT = 40; // px
