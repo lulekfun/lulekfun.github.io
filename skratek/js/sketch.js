@@ -12,7 +12,8 @@ let ground;
 let progress;
 
 const COLORS = {
-  GOLD: [255, 210, 50],
+  GOLD: [255, 210, 110],
+  // GOLD: [255, 210, 50],
   SAHARA: [255, 200, 25],
   ROSE_GOLD: [255, 180, 150],
   RED: [255, 150, 150],
@@ -30,8 +31,8 @@ function setup() {
   noSmooth();
   noCursor();
 
-  const TIME_INTERVAL = 1000 * 60 * 60; // 1 HOUR
-  randomSeed(new Date() / TIME_INTERVAL);
+  // const TIME_INTERVAL = 1000 * 60 * 60; // 1 HOUR
+  // randomSeed(new Date() / TIME_INTERVAL); // TODO: delete
 
   // -- init
   progress = new Progress();
@@ -49,9 +50,9 @@ function draw() {
 
   if (skrat.falling) {
     const camera_speed = skrat.pos.y === 0 ? 0.01 : 0.15;
-    CAMERA_HEIGHT = lerp(CAMERA_HEIGHT, max(0, skrat.pos.y - height / 3), camera_speed); // falling down
+    CAMERA_HEIGHT = lerp(CAMERA_HEIGHT, max(0, skrat.pos.y - height / 3), camera_speed * COEFF); // falling down
   } else {
-    CAMERA_HEIGHT = lerp(CAMERA_HEIGHT, max(0, skrat.floor - height / 3), 0.05); // keeping up
+    CAMERA_HEIGHT = lerp(CAMERA_HEIGHT, max(0, skrat.floor - height / 3), 0.05 * COEFF); // keeping up
   }
 
   // -- render
@@ -63,6 +64,9 @@ function draw() {
 }
 
 function init() {
+  const TIME_INTERVAL = 1000 * 60 * 60; // 1 HOUR
+  randomSeed(LEVEL + new Date() / TIME_INTERVAL); // LEVEL + ..
+
   FLOORS_NO = floorsNo(LEVEL);
 
   GRAVITY = 0.3;

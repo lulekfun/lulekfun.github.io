@@ -59,8 +59,6 @@ class Powerup {
   }
 
   checkCollect() {
-    if (this.is_collected) return; // TODO: remove? je ze v loopu
-
     const MAX_DISTANCE = 15;
     const collecting = dist(skrat.pos.x, skrat.pos.y, this.pos.x, this.pos.y) < MAX_DISTANCE;
 
@@ -84,18 +82,12 @@ class Powerup {
 class Goal extends Powerup {
   constructor(floor) {
     super(floor);
-    this.color = color(COLORS.ROSE_GOLD);
+    this.color = color(COLORS.GOLD);
     this.radius = 7;
   }
 
-  onCollect() {
-    if (!powerups.all_collected) return;
-    this.is_collected = true;
-    LEVEL++;
-  }
-
   update() {
-    this.checkCollect();
+    if (!this.is_collected) this.checkCollect();
 
     if (this.is_collected) {
       this.radius += COEFF;
@@ -105,6 +97,13 @@ class Goal extends Powerup {
 
       if (alpha < -50) init();
     }
+  }
+
+  onCollect() {
+    if (!powerups.all_collected) return;
+
+    this.is_collected = true;
+    LEVEL++;
   }
 
   render() {
