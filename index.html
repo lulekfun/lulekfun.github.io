@@ -71,24 +71,37 @@
           <img src="/previews/preview_vesoljcki.png" alt="vesoljčki" />
         </a>
       </div>
-      
+
       <div class="box kacica">
-        <a href="/kacica">
+        <a href="/kacica/">
           <img src="/previews/preview_kacica.png" alt="kacica" />
         </a>
       </div>
-      
+
       <div class="box crtica">
-        <a href="/crtica">
+        <a href="/crtica/">
           <img src="/previews/preview_crtica.png" alt="crtica" />
         </a>
       </div>
-      
+
       <div class="box skratek">
-        <a href="/skratek">
+        <a href="/skratek/">
           <img src="/previews/preview_skratek.png" alt="skratek" />
         </a>
       </div>
     </div>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+          .register('/sw.js')
+          .then((reg) => {
+            console.log('sw registered. scope is: ' + reg.scope);
+          })
+          .catch((err) => console.warn(err));
+      } else {
+        console.warn('sw not supported');
+      }
+    </script>
   </body>
 </html>
