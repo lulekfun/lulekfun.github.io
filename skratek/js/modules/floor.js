@@ -16,11 +16,15 @@ const floors = {
       const y = i * FLOOR_HEIGHT;
       const x = random(MARGIN_X, width - MARGIN_X); // TESTING: random() < 0.5 ? 50 : width/2 + 50;
 
-      const floor_type = randomFloorType(i);
-      if (floor_type === 'NORMAL') fl = new Floor(x, y);
-      else if (floor_type === 'MOVING') fl = new MovingFloor(x, y);
-      else if (floor_type === 'SHY') fl = new ShyFloor(x, y);
-      else if (floor_type === 'MIRROR') fl = new MirrorFloor(x, y);
+      const FLOORS = {
+        NORMAL: Floor,
+        MOVING: MovingFloor,
+        ALTERNATING: AlternatingFloor,
+        SHY: ShyFloor,
+        MIRROR: MirrorFloor,
+      };
+
+      const fl = new FLOORS[randomFloorType(i)](x, y);
 
       this.arr.push(fl);
     }
@@ -45,8 +49,8 @@ const floors = {
 // --- CLASS DECLARATIONS
 
 class Floor {
-  constructor(x, y, w) {
-    this.width = w || FLOOR_WIDTH; // 40
+  constructor(x, y) {
+    this.width = FLOOR_WIDTH; // 40
     this.pos = { x, y };
   }
 
@@ -110,8 +114,9 @@ class Floor {
 }
 
 class Ground extends Floor {
-  constructor(x, y, w) {
-    super(x, y, w);
+  constructor(x, y) {
+    super(x, y);
+    this.width = width;
   }
 
   update() {
@@ -125,11 +130,11 @@ class Ground extends Floor {
 }
 
 class MovingFloor extends Floor {
-  constructor(x, y, w, dir) {
-    super(x, y, w);
+  constructor(x, y) {
+    super(x, y);
 
     this.offset = x;
-    this.dir = dir || random([-1, 1]);
+    this.dir = random([-1, 1]);
   }
 
   update() {
@@ -143,9 +148,20 @@ class MovingFloor extends Floor {
   }
 }
 
+class AlternatingFloor extends MovingFloor {
+  constructor(x, y) {
+    super(x, y);
+  }
+
+  onIntersection() {
+    skrat.jump(this.pos.x, this.pos.y);
+    this.dir *= -1;
+  }
+}
+
 class ShyFloor extends Floor {
-  constructor(x, y, w) {
-    super(x, y, w);
+  constructor(x, y) {
+    super(x, y);
 
     this.target_x = x;
   }
@@ -166,8 +182,8 @@ class ShyFloor extends Floor {
 }
 
 class MirrorFloor extends Floor {
-  constructor(x, y, w) {
-    super(x, y, w);
+  constructor(x, y) {
+    super(x, y);
 
     this.offset = x - width / 2;
   }
@@ -197,9 +213,9 @@ function linesIntersect(a, b, c, d, p, q, r, s) {
 
 function randomFloorType(floor_no) {
   // pri 20 je 0% verjetnost, pri 250 pa 50%
-  const probability = map(floor_no, 20, 250, 0, 0.5);
+  const probability = map(floor_no, 20, 250, 0, 1);
 
-  // return 'MOVING';
+  // return 'ALTERNATING';
   // return random(['MIRROR', 'NORMAL']);
 
   if (floor_no >= floorsNo(MAX_LEVEL) - 20) return 'MOVING';

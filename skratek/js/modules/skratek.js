@@ -2,7 +2,7 @@ let GRAVITY = 0.3;
 let FRICTION = 0.15; // 0 -> 1 [0.15]
 let DIR = 1; // -1 if reversed
 
-class Agent {
+class Skratek {
   constructor() {
     this.pos = {
       x: width / 2,
