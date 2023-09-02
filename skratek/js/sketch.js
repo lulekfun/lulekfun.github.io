@@ -2,7 +2,7 @@ let COEFF = 1;
 let CAMERA_HEIGHT = 0;
 const MARGIN_X = 30; // (px) HALF OF FLOOR WIDTH = 25
 
-let LEVEL = 10; // starts with 1
+let LEVEL = 0; // starts with 1 (init adds 1)
 let FLOORS_NO = 0;
 const MAX_LEVEL = 10;
 const FLOOR_HEIGHT = 40; // px
@@ -25,14 +25,21 @@ const COLORS = {
   MOLD: [180, 230, 210],
 };
 
+let lexend;
+
+function preload() {
+  lexend = loadFont('fonts/Lexend-Thin.ttf');
+}
+
 function setup() {
   createCanvas(200, 400);
 
   noSmooth();
   noCursor();
 
-  // const TIME_INTERVAL = 1000 * 60 * 60; // 1 HOUR
-  // randomSeed(new Date() / TIME_INTERVAL); // TODO: delete
+  textFont(lexend);
+  textSize(100);
+  textAlign(CENTER, CENTER);
 
   // -- init
   progress = new Progress();
@@ -57,13 +64,24 @@ function draw() {
 
   // -- render
   background(255);
+
+  drawText();
+
   powerups.render();
   floors.render();
   skrat.render();
   progress.render();
 }
 
+function drawText() {
+  const pos = height * 0.6 + CAMERA_HEIGHT / 2;
+  noStroke(0);
+  fill(240);
+  text(LEVEL, width / 2, pos);
+}
+
 function init() {
+  LEVEL++;
   const TIME_INTERVAL = 1000 * 60 * 60; // 1 HOUR
   randomSeed(LEVEL + new Date() / TIME_INTERVAL); // LEVEL + ..
 

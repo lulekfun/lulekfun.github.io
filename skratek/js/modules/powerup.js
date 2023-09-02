@@ -103,7 +103,7 @@ class Goal extends Powerup {
     if (!powerups.all_collected) return;
 
     this.is_collected = true;
-    LEVEL++;
+    // LEVEL++; on INIT
   }
 
   render() {
@@ -146,7 +146,13 @@ class NaughtyBall extends Powerup {
     this.is_collected = true;
     this.color.setAlpha(80); // this.color = color(COLORS.MAGENTA);
 
-    const type = random(['SHRINK', 'REVERSE', 'BUTTER']);
+    const probs = {
+      SHRINK: 3,
+      REVERSE: 2,
+      BUTTER: 1,
+    };
+
+    const type = weightedRandom(probs);
 
     if (type === 'SHRINK') FLOOR_WIDTH *= 0.8;
     else if (type === 'REVERSE') DIR *= -1;

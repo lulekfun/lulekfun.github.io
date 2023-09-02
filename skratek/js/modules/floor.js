@@ -202,7 +202,7 @@ class MirrorFloor extends Floor {
 // --- UTILS
 
 function linesIntersect(a, b, c, d, p, q, r, s) {
-  // returns true if the line from (a,b)->(c,d) intersects with (p,q)->(r,s)
+  // returns true if the line (a,b)->(c,d) intersects with (p,q)->(r,s)
   const det = (c - a) * (s - q) - (r - p) * (d - b);
   if (det === 0) return false;
 
@@ -212,16 +212,29 @@ function linesIntersect(a, b, c, d, p, q, r, s) {
 }
 
 function randomFloorType(floor_no) {
-  // pri 20 je 0% verjetnost, pri 250 pa 50%
-  const probability = map(floor_no, 20, 250, 0, 1);
-
-  // return 'ALTERNATING';
-  // return random(['MIRROR', 'NORMAL']);
+  // pri 20 je 0% verjetnost, pri 250 pa 75%
+  const probability = map(floor_no, 10, max(40, floorsNo(LEVEL)), 0, 0.7);
 
   if (floor_no >= floorsNo(MAX_LEVEL) - 20) return 'MOVING';
+  else if (random() > probability) return 'NORMAL';
 
-  if (random() < probability) {
-    return random(['MOVING', 'SHY', 'MIRROR']);
+  const probs = {
+    MOVING: 10,
+    SHY: 10,
+    MIRROR: 10,
+    ALTERNATING: 2,
+  };
+
+  return weightedRandom(probs);
+}
+
+function weightedRandom(obj) {
+  let acc = 0;
+  const entries = Object.entries(obj);
+  const maxVal = entries.reduce((acc, cur) => acc + cur[1], 0);
+  const rand = random() * maxVal;
+  for (let [name, prob] of entries) {
+    acc += prob;
+    if (acc > rand) return name;
   }
-  return 'NORMAL';
 }
