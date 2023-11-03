@@ -71,5 +71,7 @@ class Skratek {
     const pos_y = CAMERA_HEIGHT + height - this.pos.y - this.img_width / 2;
     imageMode(CENTER);
     image(this.img, this.pos.x, pos_y, this.img_width, this.img_height);
+    image(this.img, this.pos.x + width, pos_y, this.img_width, this.img_height); // overlapping
+    image(this.img, this.pos.x - width, pos_y, this.img_width, this.img_height); // overlapping
   }
 }

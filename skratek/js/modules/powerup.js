@@ -45,6 +45,7 @@ class Powerup {
     };
 
     this.color = color(COLORS.MOLD);
+    this.radius = 7;
     this.is_collected = false;
 
     this.floor = floor;
@@ -55,7 +56,7 @@ class Powerup {
   }
 
   update() {
-    this.checkCollect();
+    if (!this.is_collected) this.checkCollect();
   }
 
   checkCollect() {
@@ -74,7 +75,7 @@ class Powerup {
 
   render() {
     stroke(this.color);
-    strokeWeight(7);
+    strokeWeight(this.radius);
     point(this.pos.x, CAMERA_HEIGHT + height - this.pos.y);
   }
 }
@@ -95,7 +96,10 @@ class Goal extends Powerup {
       const alpha = 360 - this.radius;
       this.color.setAlpha(alpha);
 
-      if (alpha < -50) init();
+      if (alpha < -50) {
+        LEVEL++;
+        init();
+      }
     }
   }
 
@@ -103,7 +107,6 @@ class Goal extends Powerup {
     if (!powerups.all_collected) return;
 
     this.is_collected = true;
-    // LEVEL++; on INIT
   }
 
   render() {

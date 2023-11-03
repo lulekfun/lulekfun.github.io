@@ -2,7 +2,7 @@ let COEFF = 1;
 let CAMERA_HEIGHT = 0;
 const MARGIN_X = 30; // (px) HALF OF FLOOR WIDTH = 25
 
-let LEVEL = 0; // starts with 1 (init adds 1)
+let LEVEL = 1; // starts with 1
 let FLOORS_NO = 0;
 const MAX_LEVEL = 10;
 const FLOOR_HEIGHT = 40; // px
@@ -81,7 +81,6 @@ function drawText() {
 }
 
 function init() {
-  LEVEL++;
   const TIME_INTERVAL = 1000 * 60 * 60; // 1 HOUR
   randomSeed(LEVEL + new Date() / TIME_INTERVAL); // LEVEL + ..
 
@@ -101,8 +100,13 @@ function heal() {
   FRICTION = 0.15;
   DIR = 1;
   FLOOR_WIDTH = 40;
+}
 
-  // powerups.init(); // NOTE: vprasaj larico, kaj ji je boljse
+function keyPressed() {
+  if (keyCode === ENTER && powerups.goal.is_collected) {
+    LEVEL++;
+    init();
+  }
 }
 
 // --- UTILS
