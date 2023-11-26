@@ -9,7 +9,7 @@ const powerups = {
 
     for (let i = 6; i < floors.arr.length; i += 7) {
       const fl = floors.arr[i];
-      const pw = LEVEL > 2 && random() < 0.1 ? new NaughtyBall(fl) : new Powerup(fl);
+      const pw = LEVEL > 2 && i < floorsNo(MAX_LEVEL) - 20 && random() < 0.1 ? new NaughtyBall(fl) : new Powerup(fl);
       this.arr.push(pw);
       fl.powerup = pw;
     }
