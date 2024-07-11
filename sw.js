@@ -4,7 +4,14 @@ const CACHE_NAME = 'site-cache-v1';
 self.addEventListener('install', (evt) => {
   evt.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(['/', '/index.html', '/fallback.html', '/favicon.ico']);
+      return cache.addAll([
+        '/',
+        '/index.html',
+        '/fallback.html',
+        '/favicon.ico',
+        // '/skratek/fonts/Lexend-Thin.ttf',
+        // '/skratek/img/skratek_prozoren.png',
+      ]);
     })
   );
 });
